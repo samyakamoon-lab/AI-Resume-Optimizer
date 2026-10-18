@@ -1,0 +1,968 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Resume Builder - ResumeBuilder AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-file-alt"></i>
+                    <span>ResumeBuilder AI</span>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="template.html">Templates</a>
+                    <a href="#" class="btn-primary" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <main class="resume-builder-main">
+        <div class="container">
+            <!-- Progress Steps -->
+            <div class="progress-steps">
+                <div class="step active" data-step="1">
+                    <div class="step-number">1</div>
+                    <div class="step-label">Basic Info</div>
+                </div>
+                <div class="step" data-step="2">
+                    <div class="step-number">2</div>
+                    <div class="step-label">Accuracy Check</div>
+                </div>
+                <div class="step" data-step="3">
+                    <div class="step-number">3</div>
+                    <div class="step-label">AI Assistant</div>
+                </div>
+                <div class="step" data-step="4">
+                    <div class="step-number">4</div>
+                    <div class="step-label">Interview</div>
+                </div>
+                <div class="step" data-step="5">
+                    <div class="step-number">5</div>
+                    <div class="step-label">Fake Detection</div>
+                </div>
+                <div class="step" data-step="6">
+                    <div class="step-number">6</div>
+                    <div class="step-label">Resume Heatmap</div>
+                </div>
+                <div class="step" data-step="7">
+                    <div class="step-number">7</div>
+                    <div class="step-label">Fresher Rescue</div>
+                </div>
+                <div class="step" data-step="8">
+                    <div class="step-number">8</div>
+                    <div class="step-label">Facial Analysis</div>
+                </div>
+            </div>
+
+            <!-- Step 1: Resume Information Form -->
+            <div class="step-content active" id="step1">
+                <div class="builder-layout">
+                    <div class="form-section">
+                        <h2>Enter Your Information</h2>
+                        <form id="resumeForm" class="resume-form">
+                            <!-- Personal Information -->
+                            <div class="form-section-group">
+                                <h3>Personal Information</h3>
+                                <div class="form-row">
+                                    <div class="form-group">
+                                        <label for="firstName">First Name</label>
+                                        <input type="text" id="firstName" name="firstName" required>
+                                    </div>
+                                    <div class="form-group">
+                                        <label for="lastName">Last Name</label>
+                                        <input type="text" id="lastName" name="lastName" required>
+                                    </div>
+                                </div>
+                                <div class="form-group">
+                                    <label for="email">Email</label>
+                                    <input type="email" id="email" name="email" required>
+                                </div>
+                                <div class="form-group">
+                                    <label for="phone">Phone</label>
+                                    <input type="tel" id="phone" name="phone">
+                                </div>
+                                <div class="form-group">
+                                    <label for="location">Location</label>
+                                    <input type="text" id="location" name="location">
+                                </div>
+                                <div class="form-group">
+                                    <label for="linkedin">LinkedIn URL</label>
+                                    <input type="url" id="linkedin" name="linkedin">
+                                </div>
+                                <div class="form-group photo-upload-group">
+                                    <label for="photo">Profile Photo</label>
+                                    <div class="photo-upload-container">
+                                        <input type="file" id="photo" name="photo" accept="image/*" class="photo-input">
+                                        <div class="photo-preview" id="photoPreview">
+                                            <i class="fas fa-user"></i>
+                                            <span>Upload Photo</span>
+                                        </div>
+                                        <button type="button" class="btn-secondary photo-remove-btn" id="removePhoto" style="display: none;">
+                                            <i class="fas fa-trash"></i> Remove
+                                        </button>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Professional Summary -->
+                            <div class="form-section-group">
+                                <h3>Professional Summary</h3>
+                                <div class="form-group">
+                                    <label for="summary">Summary</label>
+                                    <textarea id="summary" name="summary" rows="4" placeholder="Write a brief professional summary about yourself..."></textarea>
+                                    <button type="button" class="btn-ai-suggest" onclick="showSummarySuggestions()">
+                                        <i class="fas fa-magic"></i> Get AI Suggestions
+                                    </button>
+                                    <div class="ai-suggestions-dropdown" id="summarySuggestions" style="display: none;">
+                                        <div class="suggestions-header">
+                                            <span>Choose a professional summary (20 suggestions)</span>
+                                            <button type="button" class="close-suggestions" onclick="hideSummarySuggestions()">
+                                                <i class="fas fa-times"></i>
+                                            </button>
+                                        </div>
+                                        <div class="suggestions-list" id="summarySuggestionsList">
+                                            <!-- Suggestions will be populated here -->
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+
+                            <!-- Work Experience -->
+                            <div class="form-section-group">
+                                <h3>Work Experience</h3>
+                                <div id="experienceList">
+                                    <div class="experience-item">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="jobTitle0">Job Title</label>
+                                                <input type="text" id="jobTitle0" name="jobTitle" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="company0">Company</label>
+                                                <input type="text" id="company0" name="company" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="startDate0">Start Date</label>
+                                                <input type="month" id="startDate0" name="startDate" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="endDate0">End Date</label>
+                                                <input type="month" id="endDate0" name="endDate">
+                                                <div class="form-group">
+                                                    <label>
+                                                        <input type="checkbox" id="currentJob0" name="currentJob"> Current Job
+                                                    </label>
+                                                </div>
+                                            </div>
+                                        </div>
+                                        <div class="form-group">
+                                            <label for="description0">Job Description</label>
+                                            <textarea id="description0" name="description" rows="3" required></textarea>
+                                            <button type="button" class="btn-ai-suggest" onclick="showDescriptionSuggestions('description0')">
+                                                <i class="fas fa-magic"></i> Get AI Suggestions
+                                            </button>
+                                            <div class="ai-suggestions-dropdown" id="description0Suggestions" style="display: none;">
+                                                <div class="suggestions-header">
+                                                    <span>Choose a job description (20 suggestions)</span>
+                                                    <button type="button" class="close-suggestions" onclick="hideDescriptionSuggestions('description0')">
+                                                        <i class="fas fa-times"></i>
+                                                    </button>
+                                                </div>
+                                                <div class="suggestions-list" id="description0SuggestionsList">
+                                                    <!-- Suggestions will be populated here -->
+                                                </div>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-secondary" onclick="addExperience()">
+                                    <i class="fas fa-plus"></i> Add Experience
+                                </button>
+                            </div>
+
+                            <!-- Education -->
+                            <div class="form-section-group">
+                                <h3>Education</h3>
+                                <div id="educationList">
+                                    <div class="education-item">
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="degree0">Degree</label>
+                                                <input type="text" id="degree0" name="degree" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="institution0">Institution</label>
+                                                <input type="text" id="institution0" name="institution" required>
+                                            </div>
+                                        </div>
+                                        <div class="form-row">
+                                            <div class="form-group">
+                                                <label for="gradYear0">Graduation Year</label>
+                                                <input type="number" id="gradYear0" name="gradYear" min="1950" max="2030" required>
+                                            </div>
+                                            <div class="form-group">
+                                                <label for="gpa0">GPA (Optional)</label>
+                                                <input type="number" id="gpa0" name="gpa" min="0" max="4" step="0.1">
+                                            </div>
+                                        </div>
+                                    </div>
+                                </div>
+                                <button type="button" class="btn-secondary" onclick="addEducation()">
+                                    <i class="fas fa-plus"></i> Add Education
+                                </button>
+                            </div>
+
+                            <!-- Skills -->
+                            <div class="form-section-group">
+                                <h3>Skills</h3>
+                                <div class="form-group">
+                                    <label for="skills">Skills</label>
+                                    <textarea id="skills" name="skills" rows="3" placeholder="e.g., JavaScript, Python, Project Management, Communication..."></textarea>
+                                </div>
+                            </div>
+
+                            <div class="form-actions">
+                                <button type="button" class="btn-secondary" onclick="testForm()">Test Form</button>
+                                <button type="submit" class="btn-primary">Continue to Accuracy Check</button>
+                            </div>
+                        </form>
+                    </div>
+
+                    <!-- Live Preview -->
+                    <div class="preview-section">
+                        <div class="preview-header">
+                            <h2>Live Preview</h2>
+                            <button type="button" class="btn-export-pdf" onclick="exportToPDF()">
+                                <i class="fas fa-download"></i> Export to PDF
+                            </button>
+                        </div>
+                        <div class="resume-preview" id="resumePreview">
+                            <div class="resume-header">
+                                <div class="resume-photo-container" id="previewPhotoContainer" style="display: none;">
+                                    <img src="" alt="Profile Photo" id="previewPhoto" class="resume-photo">
+                                </div>
+                                <div class="resume-name">
+                                    <h1 id="previewName">Your Name</h1>
+                                    <p id="previewContact">contact@example.com | (555) 123-4567 | City, State</p>
+                                </div>
+                            </div>
+                            
+                            <div class="resume-section" id="previewSummarySection" style="display: none;">
+                                <h3>Professional Summary</h3>
+                                <p id="previewSummary"></p>
+                            </div>
+                            
+                            <div class="resume-section" id="previewExperienceSection" style="display: none;">
+                                <h3>Work Experience</h3>
+                                <div id="previewExperience"></div>
+                            </div>
+                            
+                            <div class="resume-section" id="previewEducationSection" style="display: none;">
+                                <h3>Education</h3>
+                                <div id="previewEducation"></div>
+                            </div>
+                            
+                            <div class="resume-section" id="previewSkillsSection" style="display: none;">
+                                <h3>Skills</h3>
+                                <div id="previewSkills"></div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 2: Accuracy Check -->
+            <div class="step-content" id="step2">
+                <div class="accuracy-check">
+                    <h2>Resume Accuracy Analysis</h2>
+                    <div class="accuracy-content">
+                        <div class="accuracy-score">
+                            <div class="score-circle">
+                                <div class="score-value" id="accuracyScore">0%</div>
+                            </div>
+                            <p>Overall Resume Accuracy</p>
+                        </div>
+                        
+                        <div class="accuracy-details">
+                            <h3>Accuracy Breakdown</h3>
+                            <div class="accuracy-categories">
+                                <div class="category">
+                                    <span class="category-name">Completeness</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="completenessBar" style="width: 0%"></div>
+                                    </div>
+                                    <span class="category-score" id="completenessScore">0%</span>
+                                </div>
+                                <div class="category">
+                                    <span class="category-name">Professionalism</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="professionalismBar" style="width: 0%"></div>
+                                    </div>
+                                    <span class="category-score" id="professionalismScore">0%</span>
+                                </div>
+                                <div class="category">
+                                    <span class="category-name">Relevance</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="relevanceBar" style="width: 0%"></div>
+                                    </div>
+                                    <span class="category-score" id="relevanceScore">0%</span>
+                                </div>
+                                <div class="category">
+                                    <span class="category-name">Formatting</span>
+                                    <div class="progress-bar">
+                                        <div class="progress-fill" id="formattingBar" style="width: 0%"></div>
+                                    </div>
+                                    <span class="category-score" id="formattingScore">0%</span>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="accuracy-chart">
+                            <h3>Accuracy Trends</h3>
+                            <canvas id="accuracyChart" width="400" height="200"></canvas>
+                        </div>
+                        
+                        <div class="accuracy-recommendations">
+                            <h3>Recommendations</h3>
+                            <ul id="recommendationsList">
+                                <!-- Recommendations will be added here -->
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" onclick="goToStep(1)">Back</button>
+                        <button class="btn-primary" onclick="goToStep(3)">Continue to AI Assistant</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 3: AI Chatbot Assistant -->
+            <div class="step-content" id="step3">
+                <div class="chatbot-section">
+                    <h2>AI Resume Assistant</h2>
+                    <div class="chatbot-container">
+                        <div class="chatbot-header">
+                            <div class="bot-avatar">
+                                <i class="fas fa-robot"></i>
+                            </div>
+                            <div class="bot-info">
+                                <h3>Resume Assistant</h3>
+                                <span class="status">Online</span>
+                            </div>
+                        </div>
+                        
+                        <div class="chat-messages" id="chatMessages">
+                            <!-- Messages will be added dynamically -->
+                        </div>
+                        
+                        <div class="chat-input-container">
+                            <div class="input-group">
+                                <input type="text" id="chatInput" placeholder="Ask me anything about your resume...">
+                                <button class="btn-primary" onclick="sendMessage()">
+                                    <i class="fas fa-paper-plane"></i>
+                                </button>
+                            </div>
+                            <div class="quick-actions">
+                                <button class="quick-action" onclick="askQuestion('improve summary')">Improve Summary</button>
+                                <button class="quick-action" onclick="askQuestion('better skills')">Better Skills</button>
+                                <button class="quick-action" onclick="askQuestion('experience tips')">Experience Tips</button>
+                                <button class="quick-action" onclick="askQuestion('format advice')">Format Advice</button>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" onclick="goToStep(2)">Back</button>
+                        <button class="btn-primary" onclick="goToStep(4)">Continue to Interview</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 4: Voice Interview -->
+            <div class="step-content" id="step4">
+                <div class="interview-section">
+                    <h2>AI Interview Practice</h2>
+                    <div class="interview-container">
+                        <div class="interview-timer">
+                            <div class="timer-display">
+                                <span id="timeRemaining">01:45</span>
+                            </div>
+                            <p>Time Remaining</p>
+                        </div>
+                        
+                        <div class="interview-robot">
+                            <div class="robot-avatar-container">
+                                <div class="robot-avatar" id="robotAvatar">
+                                    <i class="fas fa-robot"></i>
+                                </div>
+                                <div class="speaking-indicator" id="speakingIndicator">
+                                    <div class="wave"></div>
+                                    <div class="wave"></div>
+                                    <div class="wave"></div>
+                                </div>
+                            </div>
+                            <div class="robot-status">
+                                <h3>AI Interview Coach</h3>
+                                <span class="status" id="interviewStatus">Ready</span>
+                            </div>
+                        </div>
+                        
+                        <div class="interview-question">
+                            <div class="question-header">
+                                <h3>Current Question</h3>
+                                <span class="question-counter" id="questionCounter">Question 0 of 5</span>
+                            </div>
+                            <p id="currentQuestion">Click "Start Interview" to begin your 1 minute 30 second practice interview. I will speak to you while you type your answers.</p>
+                            <div class="answer-timer" id="answerTimer" style="display: none;">
+                                <span class="timer-label">Time to answer:</span>
+                                <span class="timer-value" id="answerTimeRemaining">12</span>
+                                <span class="timer-unit">seconds</span>
+                            </div>
+                        </div>
+                        
+                        <div class="interview-input">
+                            <div class="input-group">
+                                <textarea id="interviewAnswer" placeholder="Type your answer here while I speak to you..." rows="3"></textarea>
+                            </div>
+                            <button class="btn-primary" id="submitAnswer" onclick="submitAnswer()" disabled>
+                                <i class="fas fa-paper-plane"></i> Submit Answer
+                            </button>
+                        </div>
+                        
+                        <div class="interview-controls">
+                            <button class="btn-primary" id="startInterview" onclick="startInterview()">
+                                <i class="fas fa-microphone"></i> Start Interview
+                            </button>
+                            <button class="btn-secondary" id="stopInterview" onclick="stopInterview()" disabled>
+                                <i class="fas fa-stop"></i> Stop Interview
+                            </button>
+                            <button class="btn-secondary" id="toggleVoice" onclick="toggleVoice()">
+                                <i class="fas fa-volume-up"></i> Voice On
+                            </button>
+                        </div>
+                        
+                        <div class="interview-feedback" id="interviewFeedback" style="display: none;">
+                            <h3>Interview Feedback</h3>
+                            <div id="feedbackContent">
+                                <!-- Feedback will be displayed here -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" onclick="goToStep(3)">Back</button>
+                        <button class="btn-primary" onclick="goToStep(5)">Continue to Fake Detection</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 5: Fake Information Detection -->
+            <div class="step-content" id="step5">
+                <div class="fake-detection-section">
+                    <h2>Fake Information Detection</h2>
+                    <div class="detection-container">
+                        <div class="detection-overview">
+                            <div class="detection-score">
+                                <div class="score-circle fake-score">
+                                    <div class="score-value" id="fakeScore">0%</div>
+                                </div>
+                                <p>Information Authenticity</p>
+                            </div>
+                            
+                            <div class="detection-summary">
+                                <h3>Detection Summary</h3>
+                                <p id="detectionSummary">Analyzing your resume information for authenticity...</p>
+                                <button type="button" class="btn-ai-suggest" onclick="reanalyzeResume()" style="margin-top: 1rem;">
+                                    <i class="fas fa-sync-alt"></i> Re-analyze Resume
+                                </button>
+                            </div>
+                        </div>
+                        
+                        <div class="detection-details">
+                            <h3>Information Analysis</h3>
+                            <div class="detection-items" id="detectionItems">
+                                <!-- Detection items will be added here -->
+                            </div>
+                        </div>
+                        
+                        <div class="detection-recommendations">
+                            <h3>Authenticity Recommendations</h3>
+                            <ul id="authenticityRecommendations">
+                                <!-- Recommendations will be added here -->
+                            </ul>
+                        </div>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" onclick="goToStep(4)">Back</button>
+                        <button class="btn-primary" onclick="goToStep(6)">View Heatmap</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 6: Resume Heatmap -->
+            <div class="step-content" id="step6">
+                <div class="heatmap-section">
+                    <h2>Resume Heatmap Analysis</h2>
+                    <p class="heatmap-intro">Visual analysis of your resume sections, keywords, and skill relevance</p>
+                    
+                    <div class="heatmap-container">
+                        <!-- Section Strength Heatmap -->
+                        <div class="heatmap-block">
+                            <h3><i class="fas fa-layer-group"></i> Section Strength Analysis</h3>
+                            <p class="heatmap-description">Word count analysis showing strong, medium, and weak sections</p>
+                            <div class="section-heatmap" id="sectionHeatmap">
+                                <!-- Sections will be generated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <!-- Keyword Heatmap -->
+                        <div class="heatmap-block">
+                            <h3><i class="fas fa-key"></i> Keyword Analysis</h3>
+                            <p class="heatmap-description">Keywords found in your resume (bright) vs missing keywords (light)</p>
+                            <div class="keyword-heatmap" id="keywordHeatmap">
+                                <!-- Keywords will be generated dynamically -->
+                            </div>
+                        </div>
+                        
+                        <!-- Skill Relevance Heatmap -->
+                        <div class="heatmap-block">
+                            <h3><i class="fas fa-bullseye"></i> Skill Relevance Heatmap</h3>
+                            <p class="heatmap-description">How your skills match target job requirements</p>
+                            <div class="skill-input-group">
+                                <label for="targetJob">Target Job/Role:</label>
+                                <input type="text" id="targetJob" placeholder="e.g., Software Engineer, Data Analyst" value="Software Engineer">
+                                <button class="btn-primary" onclick="analyzeSkillRelevance()">Analyze</button>
+                            </div>
+                            <div class="skill-heatmap" id="skillHeatmap">
+                                <!-- Skills will be generated dynamically -->
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="heatmap-legend">
+                        <h4>Legend</h4>
+                        <div class="legend-items">
+                            <div class="legend-item">
+                                <span class="legend-color strong"></span>
+                                <span>Strong (Good word count)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color medium"></span>
+                                <span>Medium (Moderate word count)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color weak"></span>
+                                <span>Weak (Low word count)</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color present"></span>
+                                <span>Keyword Present</span>
+                            </div>
+                            <div class="legend-item">
+                                <span class="legend-color missing"></span>
+                                <span>Keyword Missing</span>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div class="heatmap-recommendations" id="heatmapRecommendations">
+                        <h3>Recommendations</h3>
+                        <ul id="recommendationsList">
+                            <!-- Recommendations will be added here -->
+                        </ul>
+                    </div>
+                    
+                    <div class="step-actions">
+                        <button class="btn-secondary" onclick="goToStep(5)">Back</button>
+                        <button class="btn-primary" onclick="goToStep(7)">Next</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 7: Fresher Rescue Mode -->
+            <div class="step-content" id="step7">
+                <div class="builder-layout">
+                    <div class="form-section">
+                        <h2>🎓 Fresher Rescue Mode</h2>
+                        <p>AI-powered assistance to build your professional resume even with limited experience</p>
+                        
+                        <div class="fresher-rescue-container">
+                            <div class="fresher-input-section">
+                                <h3>Tell us about yourself</h3>
+                                <div class="form-group">
+                                    <label>What is your field of study?</label>
+                                    <input type="text" id="fieldOfStudy" placeholder="e.g., Computer Science, Business, Engineering">
+                                </div>
+                                <div class="form-group">
+                                    <label>What are your career interests?</label>
+                                    <input type="text" id="careerInterests" placeholder="e.g., Web Development, Data Analysis, Marketing">
+                                </div>
+                                <div class="form-group">
+                                    <label>Any projects or coursework you've completed?</label>
+                                    <textarea id="projects" rows="3" placeholder="e.g., Built a website, Data analysis project, Marketing campaign"></textarea>
+                                </div>
+                                <button class="btn-primary" onclick="generateFresherSuggestions()">Generate Suggestions</button>
+                            </div>
+                            
+                            <div class="fresher-suggestions-section">
+                                <div class="suggestion-card">
+                                    <div class="suggestion-header">
+                                        <i class="fas fa-graduation-cap"></i>
+                                        <h3>Skills to Learn</h3>
+                                    </div>
+                                    <div id="skillsSuggestions" class="suggestion-content">
+                                        <p class="placeholder-text">Click "Generate Suggestions" to see recommended skills</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="suggestion-card">
+                                    <div class="suggestion-header">
+                                        <i class="fas fa-briefcase"></i>
+                                        <h3>Internship Opportunities</h3>
+                                    </div>
+                                    <div id="internshipSuggestions" class="suggestion-content">
+                                        <p class="placeholder-text">Click "Generate Suggestions" to see internship opportunities</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="suggestion-card">
+                                    <div class="suggestion-header">
+                                        <i class="fas fa-mobile-alt"></i>
+                                        <h3>Recommended Apps & Platforms</h3>
+                                    </div>
+                                    <div id="appSuggestions" class="suggestion-content">
+                                        <p class="placeholder-text">Click "Generate Suggestions" to see recommended apps</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="suggestion-card">
+                                    <div class="suggestion-header">
+                                        <i class="fas fa-file-alt"></i>
+                                        <h3>Resume Fill Assistance</h3>
+                                    </div>
+                                    <div id="resumeFillSuggestions" class="suggestion-content">
+                                        <p class="placeholder-text">Click "Generate Suggestions" to get resume fill assistance</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-secondary" onclick="goToStep(6)">Back</button>
+                            <button class="btn-primary" onclick="goToStep(8)">Next</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Step 8: Facial Expression Analysis -->
+            <div class="step-content" id="step8">
+                <div class="builder-layout">
+                    <div class="form-section">
+                        <h2>🎭 Facial Expression & Confidence Analysis</h2>
+                        <p>AI-powered analysis of your eye contact, smile, and confidence level for interview preparation</p>
+                        
+                        <div class="facial-analysis-container">
+                            <div class="camera-section">
+                                <div class="camera-wrapper">
+                                    <video id="cameraVideo" autoplay playsinline></video>
+                                    <canvas id="overlayCanvas"></canvas>
+                                    <div id="cameraPlaceholder" class="camera-placeholder">
+                                        <i class="fas fa-camera"></i>
+                                        <p>Camera will appear here</p>
+                                    </div>
+                                    <div id="loadingModels" class="loading-models" style="display: none;">
+                                        <i class="fas fa-spinner fa-spin"></i>
+                                        <p>Loading AI models...</p>
+                                    </div>
+                                </div>
+                                
+                                <div class="camera-controls">
+                                    <button class="btn-primary" id="startCameraBtn" onclick="startCamera()">Start Camera</button>
+                                    <button class="btn-secondary" id="stopCameraBtn" onclick="stopCamera()" style="display: none;">Stop Camera</button>
+                                    <button class="btn-success" id="captureBtn" onclick="captureAnalysis()" style="display: none;">Analyze Expression</button>
+                                </div>
+                            </div>
+                            
+                            <div class="analysis-results">
+                                <div class="result-card">
+                                    <div class="result-header">
+                                        <i class="fas fa-eye"></i>
+                                        <h3>Eye Contact</h3>
+                                    </div>
+                                    <div class="result-content">
+                                        <div id="eyeContactResult" class="result-value">--</div>
+                                        <div id="eyeContactFeedback" class="feedback-text">Start camera to analyze</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="result-card">
+                                    <div class="result-header">
+                                        <i class="fas fa-smile"></i>
+                                        <h3>Smile Detection</h3>
+                                    </div>
+                                    <div class="result-content">
+                                        <div id="smileResult" class="result-value">--</div>
+                                        <div id="smileFeedback" class="feedback-text">Start camera to analyze</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="result-card">
+                                    <div class="result-header">
+                                        <i class="fas fa-chart-line"></i>
+                                        <h3>Confidence Level</h3>
+                                    </div>
+                                    <div class="result-content">
+                                        <div id="confidenceResult" class="result-value">--</div>
+                                        <div id="confidenceFeedback" class="feedback-text">Start camera to analyze</div>
+                                    </div>
+                                </div>
+                                
+                                <div class="overall-feedback">
+                                    <h3>Overall Feedback</h3>
+                                    <div id="overallFeedbackText" class="feedback-content">
+                                        <p>Start the camera and analyze your expression to receive personalized feedback on your facial expressions and confidence level.</p>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="step-actions">
+                            <button class="btn-secondary" onclick="goToStep(7)">Back</button>
+                            <button class="btn-primary" onclick="finishResume()">Complete Resume</button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </main>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/html2pdf.js/0.10.1/html2pdf.bundle.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/face-api.js@0.22.2/dist/face-api.min.js"></script>
+    <script src="script.js"></script>
+    <script>
+        // Apply selected template when page loads
+        document.addEventListener('DOMContentLoaded', function() {
+            const selectedTemplate = localStorage.getItem('selectedTemplate') || 'basic';
+            if (document.getElementById('resumePreview')) {
+                applyTemplateToPreview();
+            }
+        });
+
+        // Export resume to PDF
+        function exportToPDF() {
+            const resumePreview = document.getElementById('resumePreview');
+            if (!resumePreview) {
+                alert('No resume to export. Please fill in your information first.');
+                return;
+            }
+
+            // Get user name for filename
+            const firstName = document.getElementById('firstName')?.value || '';
+            const lastName = document.getElementById('lastName')?.value || '';
+            const filename = firstName || lastName 
+                ? `${firstName}_${lastName}_Resume.pdf`.replace(/\s+/g, '_')
+                : 'My_Resume.pdf';
+
+            // Save original styles
+            const originalStyles = {
+                position: resumePreview.style.position,
+                transform: resumePreview.style.transform,
+                margin: resumePreview.style.margin,
+                boxShadow: resumePreview.style.boxShadow,
+                border: resumePreview.style.border
+            };
+
+            // Temporarily modify styles for PDF capture
+            resumePreview.style.position = 'relative';
+            resumePreview.style.transform = 'none';
+            resumePreview.style.margin = '0';
+            resumePreview.style.boxShadow = 'none';
+
+            // Configure PDF options
+            const opt = {
+                margin: [10, 10, 10, 10], // Margins in mm
+                filename: filename,
+                image: { type: 'jpeg', quality: 0.98 },
+                html2canvas: { 
+                    scale: 2,
+                    useCORS: true,
+                    letterRendering: true,
+                    scrollY: 0,
+                    scrollX: 0
+                },
+                jsPDF: { 
+                    unit: 'mm', 
+                    format: 'a4', 
+                    orientation: 'portrait',
+                    putOnlyUsedFonts: true,
+                    compress: true
+                }
+            };
+
+            // Show loading message
+            const exportBtn = document.querySelector('.btn-export-pdf');
+            const originalText = exportBtn.innerHTML;
+            exportBtn.innerHTML = '<i class="fas fa-spinner fa-spin"></i> Generating PDF...';
+            exportBtn.disabled = true;
+
+            // Generate PDF
+            html2pdf().set(opt).from(resumePreview).save().then(() => {
+                // Restore original styles
+                resumePreview.style.position = originalStyles.position;
+                resumePreview.style.transform = originalStyles.transform;
+                resumePreview.style.margin = originalStyles.margin;
+                resumePreview.style.boxShadow = originalStyles.boxShadow;
+                
+                // Reset button
+                exportBtn.innerHTML = originalText;
+                exportBtn.disabled = false;
+            }).catch((error) => {
+                console.error('PDF export error:', error);
+                // Restore original styles even on error
+                resumePreview.style.position = originalStyles.position;
+                resumePreview.style.transform = originalStyles.transform;
+                resumePreview.style.margin = originalStyles.margin;
+                resumePreview.style.boxShadow = originalStyles.boxShadow;
+                
+                alert('Error generating PDF. Please try again.');
+                exportBtn.innerHTML = originalText;
+                exportBtn.disabled = false;
+            });
+        }
+
+        // AI Suggestion Data - 20 Professional Summaries
+        const professionalSummaries = [
+            "Results-driven professional with 5+ years of experience in driving business growth and operational excellence. Proven track record of leading cross-functional teams to deliver high-impact projects on time and within budget. Passionate about leveraging data-driven insights to optimize processes and enhance customer satisfaction.",
+            "Dynamic and innovative professional with expertise in strategic planning, project management, and team leadership. Skilled at identifying opportunities for improvement and implementing effective solutions that drive revenue growth. Strong communicator with ability to build relationships across all organizational levels.",
+            "Detail-oriented professional with comprehensive experience in managing complex operations and delivering exceptional results. Demonstrated ability to streamline workflows, reduce costs, and improve efficiency. Committed to continuous learning and staying ahead of industry trends.",
+            "Strategic thinker with proven ability to transform challenges into opportunities. Experienced in developing and executing business strategies that align with organizational goals. Strong analytical skills combined with creative problem-solving abilities to drive sustainable growth.",
+            "Highly motivated professional with exceptional organizational and multitasking abilities. Track record of successfully managing multiple priorities while maintaining high standards of quality. Skilled in building and maintaining positive working relationships with stakeholders at all levels.",
+            "Innovative professional with expertise in digital transformation and technology implementation. Proven ability to lead teams through change initiatives and adopt new technologies that enhance productivity. Passionate about creating user-centric solutions that drive engagement.",
+            "Accomplished professional with strong background in financial analysis, budgeting, and forecasting. Skilled at interpreting complex data to provide actionable insights that support strategic decision-making. Committed to maintaining highest standards of accuracy and integrity.",
+            "Customer-focused professional with extensive experience in client relationship management and service delivery. Proven ability to understand client needs and deliver tailored solutions that exceed expectations. Strong track record of retaining and growing key accounts.",
+            "Versatile professional with diverse experience across multiple industries and functions. Quick learner who adapts easily to new environments and challenges. Known for bringing fresh perspectives and innovative approaches to problem-solving.",
+            "Collaborative leader with experience in building and developing high-performing teams. Skilled at mentoring team members and creating positive work environments that foster creativity and productivity. Committed to achieving team goals while supporting individual growth.",
+            "Results-oriented professional with expertise in sales and business development. Consistently exceeded targets and built strong pipeline of opportunities. Skilled at negotiating complex deals and maintaining long-term client relationships.",
+            "Analytical professional with strong research and data analysis capabilities. Experienced in conducting market research, competitive analysis, and trend forecasting to support strategic planning. Proficient in utilizing various analytics tools and methodologies.",
+            "Creative professional with background in marketing, branding, and content strategy. Skilled at developing compelling narratives and visual content that resonates with target audiences. Track record of successful campaigns that increased brand awareness and engagement.",
+            "Operations specialist with expertise in supply chain management and logistics optimization. Proven ability to reduce costs, improve delivery times, and enhance overall operational efficiency. Skilled at managing vendor relationships and negotiating favorable terms.",
+            "HR professional with comprehensive experience in talent acquisition, employee development, and performance management. Passionate about creating inclusive workplace cultures and implementing programs that support employee well-being and career growth.",
+            "IT professional with expertise in system administration, network security, and technical support. Proven ability to troubleshoot complex technical issues and implement solutions that minimize downtime. Committed to staying current with emerging technologies.",
+            "Project management professional with PMP certification and experience managing large-scale initiatives. Skilled at coordinating resources, managing timelines, and ensuring successful project delivery. Strong risk management and stakeholder communication abilities.",
+            "Quality assurance professional with expertise in developing and implementing testing protocols. Experienced in identifying defects, analyzing root causes, and driving continuous improvement initiatives. Committed to delivering products that meet highest quality standards.",
+            "Compliance professional with thorough understanding of regulatory requirements and industry standards. Skilled at developing policies and procedures that ensure organizational compliance. Strong attention to detail and ability to interpret complex regulations.",
+            "Executive assistant with exceptional administrative and coordination skills. Proven ability to manage executive calendars, coordinate complex travel arrangements, and handle confidential information with discretion. Skilled at anticipating needs and proactively addressing issues."
+        ];
+
+        // AI Suggestion Data - 20 Job Descriptions
+        const jobDescriptions = [
+            "Led a team of 10 professionals in executing strategic initiatives that resulted in 25% increase in operational efficiency. Developed and implemented new processes that reduced project delivery time by 30%. Collaborated with cross-functional teams to ensure alignment with organizational goals and delivered projects on time and within budget.",
+            "Managed key client accounts generating $2M in annual revenue. Built strong relationships with stakeholders and consistently achieved 95% client satisfaction scores. Identified upsell opportunities and expanded service offerings, resulting in 15% revenue growth year-over-year.",
+            "Developed and executed comprehensive marketing campaigns across digital and traditional channels. Increased website traffic by 40% and generated 500+ qualified leads per quarter. Analyzed campaign performance metrics and optimized strategies to improve ROI by 35%.",
+            "Streamlined financial reporting processes, reducing monthly close time from 10 days to 5 days. Implemented new budgeting system that improved forecast accuracy by 20%. Provided strategic financial analysis to support executive decision-making and identified cost savings of $500K annually.",
+            "Redesigned customer service workflows, resulting in 50% reduction in average response time. Trained team of 15 representatives on new procedures and quality standards. Achieved highest customer satisfaction rating in company history at 4.8/5.0.",
+            "Spearheaded digital transformation initiative, migrating 100% of company data to cloud infrastructure. Led training sessions for 200+ employees on new systems and tools. Reduced IT support tickets by 40% through improved system reliability and user education.",
+            "Conducted market research and competitive analysis to identify new business opportunities. Presented findings to executive team, resulting in launch of two new product lines. Products generated $1.5M in first-year revenue and captured 12% market share.",
+            "Managed end-to-end recruitment process, hiring 50+ employees across various departments. Reduced time-to-hire by 30% through implementation of applicant tracking system and streamlined interview process. Improved employee retention rate from 75% to 90%.",
+            "Oversaw supply chain operations for 3 distribution centers serving 500+ retail locations. Negotiated contracts with key suppliers, reducing procurement costs by 18%. Implemented inventory management system that reduced stockouts by 60% while decreasing carrying costs.",
+            "Designed and developed responsive web applications serving 100K+ monthly active users. Implemented performance optimizations that reduced page load time by 45%. Collaborated with UX team to improve user experience, resulting in 25% increase in user engagement.",
+            "Created and maintained project plans for 15+ concurrent initiatives valued at $5M+ total budget. Monitored project health metrics and implemented corrective actions to keep 95% of projects on track. Facilitated weekly status meetings and monthly steering committee reviews.",
+            "Performed comprehensive data analysis using SQL, Python, and Tableau to support business intelligence initiatives. Built automated dashboards that saved 20 hours per week of manual reporting time. Identified trends and patterns that informed strategic pricing decisions.",
+            "Coordinated company-wide training program reaching 300+ employees across 5 locations. Developed curriculum and training materials that improved compliance scores by 40%. Implemented learning management system to track progress and certifications.",
+            "Managed product lifecycle from concept to launch for 3 successful products. Conducted user research with 200+ participants to validate product-market fit. Collaborated with engineering and design teams to deliver features that increased user retention by 30%.",
+            "Implemented quality assurance protocols that reduced defect rates by 60% and improved customer satisfaction scores. Led root cause analysis for critical issues and implemented preventive measures. Achieved ISO 9001 certification for the department.",
+            "Developed and executed social media strategy that grew following from 10K to 100K across all platforms. Created content calendar and produced engaging posts that achieved 5% average engagement rate. Managed influencer partnerships that generated 2M+ impressions.",
+            "Negotiated and managed contracts with 50+ vendors and service providers. Consolidated vendor base by 30% while maintaining service quality. Achieved $750K in annual savings through strategic negotiations and competitive bidding processes.",
+            "Led cross-functional team of 20 members through organizational restructuring. Maintained employee morale and productivity during transition period. Achieved 100% retention of key talent and maintained operational continuity throughout the change.",
+            "Conducted risk assessments and implemented mitigation strategies for enterprise-wide projects. Developed business continuity plan that ensured 99.9% uptime during critical system migrations. Trained 100+ staff members on risk management protocols.",
+            "Managed office operations for 200-employee organization. Oversaw facilities, vendor relationships, and administrative staff. Implemented cost-saving initiatives that reduced operating expenses by 20% while improving employee satisfaction scores."
+        ];
+
+        // Show Professional Summary Suggestions
+        function showSummarySuggestions() {
+            const dropdown = document.getElementById('summarySuggestions');
+            const list = document.getElementById('summarySuggestionsList');
+            
+            // Clear previous suggestions
+            list.innerHTML = '';
+            
+            // Add all 20 suggestions
+            professionalSummaries.forEach((summary, index) => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `<strong>Suggestion ${index + 1}:</strong> ${summary.substring(0, 100)}...`;
+                item.title = summary;
+                item.onclick = function() {
+                    document.getElementById('summary').value = summary;
+                    updateLivePreview();
+                    hideSummarySuggestions();
+                };
+                list.appendChild(item);
+            });
+            
+            // Show dropdown
+            dropdown.style.display = 'block';
+        }
+
+        // Hide Professional Summary Suggestions
+        function hideSummarySuggestions() {
+            document.getElementById('summarySuggestions').style.display = 'none';
+        }
+
+        // Show Job Description Suggestions
+        function showDescriptionSuggestions(textareaId) {
+            const dropdown = document.getElementById(textareaId + 'Suggestions');
+            const list = document.getElementById(textareaId + 'SuggestionsList');
+            
+            // Clear previous suggestions
+            list.innerHTML = '';
+            
+            // Add all 20 suggestions
+            jobDescriptions.forEach((desc, index) => {
+                const item = document.createElement('div');
+                item.className = 'suggestion-item';
+                item.innerHTML = `<strong>Suggestion ${index + 1}:</strong> ${desc.substring(0, 100)}...`;
+                item.title = desc;
+                item.onclick = function() {
+                    document.getElementById(textareaId).value = desc;
+                    updateLivePreview();
+                    hideDescriptionSuggestions(textareaId);
+                };
+                list.appendChild(item);
+            });
+            
+            // Show dropdown
+            dropdown.style.display = 'block';
+        }
+
+        // Hide Job Description Suggestions
+        function hideDescriptionSuggestions(textareaId) {
+            document.getElementById(textareaId + 'Suggestions').style.display = 'none';
+        }
+
+        // Close suggestions when clicking outside
+        document.addEventListener('click', function(e) {
+            const summaryDropdown = document.getElementById('summarySuggestions');
+            const summaryBtn = document.querySelector('.btn-ai-suggest[onclick="showSummarySuggestions()"]');
+            
+            if (summaryDropdown && !summaryDropdown.contains(e.target) && e.target !== summaryBtn && !summaryBtn.contains(e.target)) {
+                summaryDropdown.style.display = 'none';
+            }
+        });
+    </script>
+</body>
+</html>

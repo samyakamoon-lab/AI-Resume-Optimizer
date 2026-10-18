@@ -1,0 +1,225 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Templates - ResumeBuilder AI</title>
+    <link rel="stylesheet" href="style.css">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css" rel="stylesheet">
+    <script>
+        // Redirect to home page if accessing template.html directly without being logged in
+        (function() {
+            const isLoggedIn = localStorage.getItem('currentUser') !== null;
+            const cameFromLogin = document.referrer.includes('login.html') || document.referrer.includes('register.html') || document.referrer.includes('index.html');
+            
+            // If not logged in and didn't come from login/register/home, redirect to home
+            if (!isLoggedIn && !cameFromLogin) {
+                window.location.href = 'index.html';
+            }
+        })();
+    </script>
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="nav-container">
+                <div class="logo">
+                    <i class="fas fa-file-alt"></i>
+                    <span>ResumeBuilder AI</span>
+                </div>
+                <div class="nav-links">
+                    <a href="index.html">Home</a>
+                    <a href="templates.html">Templates</a>
+                    <a href="#" class="btn-primary" onclick="logout()">Logout</a>
+                </div>
+            </div>
+        </nav>
+    </header>
+
+    <section class="templates-section">
+        <div class="container">
+            <div class="templates-header">
+                <h1>Choose a professional resume template</h1>
+                <p class="templates-subtitle">Pick a template below. You can change it later if you want to.</p>
+            </div>
+            
+            <!-- Filter Section -->
+            <div class="templates-controls">
+                <div class="filter-buttons">
+                    <button class="filter-btn active" data-category="all">All Templates</button>
+                    <button class="filter-btn" data-category="simple">Simple</button>
+                    <button class="filter-btn" data-category="modern">Modern</button>
+                    <button class="filter-btn" data-category="one-column">One Column</button>
+                    <button class="filter-btn" data-category="with-photo">With Photo</button>
+                    <button class="filter-btn" data-category="professional">Professional</button>
+                    <button class="filter-btn" data-category="ats">ATS</button>
+                </div>
+            </div>
+            
+            <div class="templates-grid" id="templatesGrid">
+                <!-- ==================== MODERN TEMPLATES ==================== -->
+                <!-- Modern Template 1: Jessie Smith - Green with Circular Badge -->
+                <div class="template-card" data-template="jessie-smith-modern" data-category="modern" onclick="selectTemplate('jessie-smith-modern')">
+                    <div class="template-preview">
+                        <div class="template-mockup jessie-smith-modern-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Jessie Smith</h3>
+                        <p>A vibrant green-themed design featuring a distinctive circular name badge and modern typography.</p>
+                    </div>
+                </div>
+
+                <!-- Modern Template 2: Raju Rathore - Elegant Light Theme -->
+                <div class="template-card" data-template="raju-rathore" data-category="modern" onclick="selectTemplate('raju-rathore')">
+                    <div class="template-preview">
+                        <div class="template-mockup raju-rathore-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Raju Rathore</h3>
+                        <p>An elegant minimalist design with soft cream background and clean two-column layout.</p>
+                    </div>
+                </div>
+
+                <!-- ==================== CLASSIC TEMPLATES ==================== -->
+                <!-- Template 7: Executive - Classic -->
+                <div class="template-card" data-template="executive" data-category="professional" onclick="selectTemplate('executive')">
+                    <div class="template-preview">
+                        <div class="template-mockup executive-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Executive</h3>
+                        <p>A comprehensive, balanced template emphasizing skills, experience, and achievements.</p>
+                    </div>
+                </div>
+
+                <!-- Template 10: James Left Sidebar - With Photo -->
+                <div class="template-card" data-template="james-sidebar" data-category="with-photo" onclick="selectTemplate('james-sidebar')">
+                    <div class="template-preview">
+                        <div class="template-mockup james-sidebar-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>James Sidebar</h3>
+                        <p>Clean left sidebar with photo placeholder and organized details section.</p>
+                    </div>
+                </div>
+
+                <!-- Template 11: James Top Header - With Photo -->
+                <div class="template-card" data-template="james-header" data-category="with-photo" onclick="selectTemplate('james-header')">
+                    <div class="template-preview">
+                        <div class="template-mockup james-header-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>James Header</h3>
+                        <p>Dark navy header with photo placeholder and elegant summary section.</p>
+                    </div>
+                </div>
+
+                <!-- Template 12: James Minimal - With Photo -->
+                <div class="template-card" data-template="james-minimal" data-category="with-photo" onclick="selectTemplate('james-minimal')">
+                    <div class="template-preview">
+                        <div class="template-mockup james-minimal-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>James Minimal</h3>
+                        <p>Minimal right-aligned photo layout with clean typography and easy reading.</p>
+                    </div>
+                </div>
+
+                <!-- Template 13: Classic - Classic -->
+                <div class="template-card" data-template="classic" data-category="simple" onclick="selectTemplate('classic')">
+                    <div class="template-preview">
+                        <div class="template-mockup classic-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Classic</h3>
+                        <p>A timeless, well-structured template that prioritizes clarity and professionalism.</p>
+                    </div>
+                </div>
+
+                <!-- Template 19: Professional - Classic -->
+                <div class="template-card" data-template="professional" data-category="simple" onclick="selectTemplate('professional')">
+                    <div class="template-preview">
+                        <div class="template-mockup professional-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Professional</h3>
+                        <p>A sophisticated, structured template highlighting career progression.</p>
+                    </div>
+                </div>
+
+                <!-- ==================== ATS TEMPLATES ==================== -->
+                <!-- ATS Template 1: Howard Jones - Centered Minimalist -->
+                <div class="template-card" data-template="howard-jones" data-category="ats" onclick="selectTemplate('howard-jones')">
+                    <div class="template-preview">
+                        <div class="template-mockup howard-jones-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Howard Jones</h3>
+                        <p>A centered minimalist ATS-friendly design with elegant typography and clear section dividers.</p>
+                    </div>
+                </div>
+
+                <!-- ATS Template 2: Jessie Smith - Clean Professional -->
+                <div class="template-card" data-template="jessie-smith" data-category="ats" onclick="selectTemplate('jessie-smith')">
+                    <div class="template-preview">
+                        <div class="template-mockup jessie-smith-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Jessie Smith</h3>
+                        <p>A clean single-column ATS template with excellent readability and structured sections.</p>
+                    </div>
+                </div>
+
+                <!-- ==================== PHOTO TEMPLATES ==================== -->
+                <!-- Template: Daryl Banks - Professional Photo Template -->
+                <div class="template-card" data-template="daryl-banks" data-category="with-photo" onclick="selectTemplate('daryl-banks')">
+                    <div class="template-preview">
+                        <div class="template-mockup daryl-banks-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Daryl Banks</h3>
+                        <p>A professional dark sidebar design with integrated photo placement and clean content layout.</p>
+                    </div>
+                </div>
+
+                <!-- Template 22: Prism - Modern -->
+                <div class="template-card" data-template="prism" data-category="modern" onclick="selectTemplate('prism')">
+                    <div class="template-preview">
+                        <div class="template-mockup prism-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Prism</h3>
+                        <p>A multifaceted modern design with vibrant colors and contemporary layout.</p>
+                    </div>
+                </div>
+
+        
+                <!-- Template 25: Kelly - Classic Sidebar with Icons -->
+                <div class="template-card" data-template="kelly" data-category="professional" onclick="selectTemplate('kelly')">
+                    <div class="template-preview">
+                        <div class="template-mockup kelly-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Kelly</h3>
+                        <p>A clean sidebar layout with icon-based contact info and organized sections.</p>
+                    </div>
+                </div>
+
+                <!-- Template 26: Howard - Centered Minimalist -->
+                <div class="template-card" data-template="howard" data-category="one-column" onclick="selectTemplate('howard')">
+                    <div class="template-preview">
+                        <div class="template-mockup howard-template"></div>
+                    </div>
+                    <div class="template-info">
+                        <h3>Howard</h3>
+                        <p>An elegant centered layout with refined typography and subtle decorative lines.</p>
+                    </div>
+                </div>
+
+            </div>
+        </div>
+    </section>
+
+    <script src="script.js"></script>
+</body>
+</html>
